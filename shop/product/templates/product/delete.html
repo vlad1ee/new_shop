@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        Вы точно хотите удалить комментарий "{{ comment }}"?
+        <form method='post'>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+                {{ field.label }}
+                {{ field }}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-danger"><small>Подтвердить</small></button>
+            <a href="{% url 'get_detail_url' pk %}" class="btn btn-primary">Отменить</a>
+        </form>
+    </div>
+{% endblock %}

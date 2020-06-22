@@ -1,0 +1,12 @@
+body {
+    padding-bottom: 70px;
+    background: white url('images/breadcumb.jpg') no-repeat;
+  }
+
+:target:before { 
+    display: block; 
+    content: ""; 
+    margin-top: -70px; 
+    height: 70px; 
+    visibility: hidden; 
+  }

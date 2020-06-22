@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for product in products %}
+    <div class="row justify-content-center">
+        <div class="card m-2" style="width: 18rem;">
+            <img src="{{ product.photo.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Title: {{ product.title}}</h5>
+              <p class="card-text">Size: {{ product.size }}</p>
+              <a href="{% url 'get_detail_url' product.pk %}" class="card-link"><button class='btn btn-primary'>Details</button></a>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Price: {{ product.price }} som</li>
+            </ul>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Views: {{product.views}}</li>
+            </ul>
+            <div class="card-body">
+                <form action="{% url 'cart_add' product_id=product.pk %}" class="ml-4" method="post">
+                  {% csrf_token %}
+                  {{ cart_product_form }}
+                  <input type="submit" class='btn btn-success m-2' value="Добавить корзину">
+              </form>
+            </div>
+          </div>
+    </div>
+    {% endfor %}
+    {% if is_paginated %}
+      <nav aria-label="...">
+        <ul class="pagination row justify-content-center mt-5">
+          <li class="page-item {% if not prev_url%}disabled{% endif %}">
+            <a class="page-link" href="{{prev_url}}" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+          {% for n in page_object.paginator.page_range %}
+          {% if page_object.number == n%}
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" href="?page={{n}}">{{n}} <span class="sr-only">(current)</span></a>
+            </li>
+          {% elif n > page_object.number|add:-2 and n < page_object_number|add:2 %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ n }}">{{n}}</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+          <li class="page-item {% if not next_url%}disabled{% endif %}">
+            <a class="page-link" href="{{next_url}}" tabindex="-1" aria-disabled="true">Next</a>
+          </li>
+        </ul>
+      </nav>
+      {% endif %}
+{% endblock content %}

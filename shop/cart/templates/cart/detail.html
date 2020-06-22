@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Your shopping cart
+{% endblock %}
+{% block content %}
+    <h1 class='text-center'>Корзина товаров</h1>
+    <table class="table">
+        <thead class="thead-light">
+            <th>Photo</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+            <th>Price</th>
+            <th>Final price</th>
+        </thead>
+        <tbody>
+        {% for item in cart %}
+            {% with product=item.product %}
+                <tr>
+                    <td>
+                        <a href="{{ product.get_absolute_url }}">
+                            <img src="
+                                {% if product.photo %}
+                                    {{ product.photo.url }}
+                                {% else %}
+                                    {% static 'img/no_image.png' %}
+                                {% endif %}">
+                        </a>
+                    </td>
+                    <td>{{ product.title }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td><a href="{% url 'cart_remove' product.id%}">Remove</a></td>
+                    <td class="num">{{ item.price }} som</td>
+                    <td class="num">{{ item.total_price }} som</td>
+                </tr>
+            {% endwith %}
+        {% endfor %}
+        <tr class="total">
+            <td>Итого:</td>
+            <td colspan="4"></td>
+            <td class="num">{{ cart.get_total_price }} som</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="{% url 'index_page_url' %}" class="btn btn-primary mb-4 mr-4">Main</a>
+        <a href="{% url 'order_create' %}" class="btn btn-success mb-4">Checkout</a>
+    </p>
+{% endblock %}

@@ -1,0 +1,16 @@
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown"></li>
+        <div class="dropdown open">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Категории
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{% url 'get_product_url' 'jacketwomen' %}">Пиджаки</a>
+            <a class="dropdown-item" href="{% url 'get_product_url' 'pantswomen' %}">Брюки</a>
+            <a class="dropdown-item" href="{% url 'get_product_url' 'shirtwomen' %}">Рубашки</a>
+            <a class="dropdown-item" href="{% url 'get_product_url' 'footwearwomen' %}">Обувь</a>
+            <a class="dropdown-item" href="{% url 'get_product_url' 'accessorywomen' %}">Аксессуары</a>
+          </div>
+        </div>
+    </li>
+</ul>

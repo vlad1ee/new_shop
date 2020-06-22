@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="card mb-3" style="max-width: 750px;">
+        <div class="row no-gutters">
+          <div class="col-md-3">
+            <img src="{{ product.photo.url }}" class="card-img" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ product.title }}</h5>
+              <p class="card-text">{{product.description}}</p>
+              <p class="card-text">Цена: {{ product.price }}</p>
+              <p class="card-text"><small class="text-muted">{{ product.date_pub }}</small></p>
+            </div>
+              <form action="{% url 'cart_add' product_id=product.pk %}" class="ml-4" method="post">
+                  {{ cart_product_form }}
+                  {% csrf_token %}
+                  <input type="submit" class='btn btn-success m-2' value="Добавить корзину">
+              </form>
+          </div>
+        </div>  
+    </div>
+</div>
+{% if product.comments_count %}
+<h6 class='text-center text-muted'>Rewiews: {{product.comments_count}}</h6>
+{% else %}
+<h6 class='text-center text-muted'>No reviews</h6>
+{% endif %}
+<ul>
+  <div class='row justify-content-center'>
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="order-info">
+  {% if product.comments.all %}
+  {% for comment in product.comments_order %}
+  <li>
+    <div class="card">
+      <div class="card-header">
+        {{comment.authored_by}}
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{comment.message}} <p class="text-muted">{{ comment.created_at}}</p></p>
+        {% if comment.authored_by == user %}
+        <a href="{% url 'comment_update_url' product.pk comment.pk %}" class="btn btn-primary sm">Edit</a>
+        <a href="{% url 'comment_delete_url' product.pk comment.pk %}" class="btn btn-danger sm">Delete</a>
+        {% endif %}
+      </div>
+    </div>
+  </li>
+</div>
+</div>
+</div>
+  {% endfor %}
+  {% endif %}
+  {% if user.is_authenticated %}
+<div class="container">
+    <form method='post'>
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            {% if field.errors %}
+                <div class="alert alert-danger">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+            {{ field.label }}
+            {{ field }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success"><small>Send</small></button>
+    </form>
+    {% else %}
+    <h4 class='text-center text-muted'>
+      Reviews can be posted only by authorized users</h4>
+    {% endif %}
+</div>
+{% endblock content %}

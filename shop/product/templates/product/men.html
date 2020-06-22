@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+      <div class="list-group">
+        <h3 class="list-group-item list-group-item-action">Categories</h3>
+        <a href="{% url 'get_product_url' 'jacketman' %}" class="list-group-item list-group-item-action">Jackets</a>
+        <a href="{% url 'get_product_url' 'shirtman' %}" class="list-group-item list-group-item-action">Shirts</a>
+        <a href="{% url 'get_product_url' 'pantsman' %}" class="list-group-item list-group-item-action">Pants</a>
+        <a href="{% url 'get_product_url' 'footwearman' %}" class="list-group-item list-group-item-action">Footwear</a>
+        <a href="{% url 'get_product_url' 'accessoryman' %}" class="list-group-item list-group-item-action">Accessories</a>
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <h1 class="text-center mb-5 mt-3">Frequently viewed products:</h1>
+      <div class="row items">
+        {% for product in products %}
+            <div class="card m-2" style="width: 18rem;">
+                <img src="{{ product.photo.url }}" class="card-img-top img-responsive" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Title: {{ product.title}}</h5>
+                  <p class="card-text">Size: {{ product.size }}</p>
+                  <a href="{% url 'get_detail_url' product.pk %}" class="card-link"><button class='btn btn-primary'>Details</button></a>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Price: {{ product.price }} som</li>
+                </ul>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Views: {{product.views}}</li>
+                </ul>
+                <div class="card-body">
+                    <form action="{% url 'cart_add' product_id=product.pk %}" class="ml-4" method="post">
+                      {{ cart_product_form }}
+                      {% csrf_token %}
+                      <input type="submit" class='btn btn-success m-2' value="Add to cart">
+                  </form>
+                </div>
+              </div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
